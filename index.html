@@ -1,17 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-0.1 - Доска объявлений</title>
+    <title>V-0.2 - Доска объявлений</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Заголовок с переключателем темы и навигацией по интересам -->
     <header>
-        <h1>V-0.1</h1>
-        <button id="theme-toggle" onclick="toggleTheme()">Сменить тему</button>
+        <h1>V-0.2</h1>
+        <button id="theme-toggle">Сменить тему</button>
         <nav id="interests-nav">
             <button onclick="loadInterest('technology')">Технологии</button>
             <button onclick="loadInterest('music')">Музыка</button>
@@ -20,23 +18,18 @@
         </nav>
     </header>
 
-    <!-- Контейнер для раздела с постами -->
-    <div class="forum-container">
+    <main class="forum-container">
         <h2 id="current-interest">Выберите интерес</h2>
-        
-        <!-- Форма создания поста -->
-        <div id="post-form">
+        <section id="post-form">
             <textarea id="post-content" placeholder="Введите сообщение..."></textarea>
             <input type="file" id="media-input" accept="image/*">
             <button onclick="addPost()">Добавить пост</button>
-        </div>
-
-        <!-- Список постов -->
-        <div id="posts">
+        </section>
+        <section id="posts">
             <h3>Посты</h3>
             <div id="post-list"></div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script src="script.js"></script>
 </body>

@@ -1,9 +1,9 @@
-// Переключение темной и светлой темы
-function toggleTheme() {
+// Переключение темы
+document.getElementById("theme-toggle").addEventListener("click", () => {
     document.body.classList.toggle("light-theme");
     const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
     localStorage.setItem("theme", theme);
-}
+});
 
 // Загрузка сохраненной темы
 document.addEventListener("DOMContentLoaded", () => {
@@ -14,53 +14,48 @@ document.addEventListener("DOMContentLoaded", () => {
     loadPosts();
 });
 
-let currentInterest = ''; // Текущий выбранный интерес
+let currentInterest = ""; 
 
-// Загрузка постов по интересам
 function loadInterest(interest) {
     currentInterest = interest;
     document.getElementById("current-interest").innerText = `Раздел: ${interest}`;
     loadPosts();
 }
 
-// Загрузка постов из localStorage по текущему интересу
 function loadPosts() {
     const posts = JSON.parse(localStorage.getItem(currentInterest) || "[]");
     const postList = document.getElementById("post-list");
     postList.innerHTML = "";
+
     posts.forEach((post, index) => {
         const postDiv = createPostElement(post, index);
         postList.appendChild(postDiv);
     });
 }
 
-// Создание элемента поста с поддержкой ответов
 function createPostElement(post, index) {
     const postDiv = document.createElement("div");
     postDiv.className = "post";
     postDiv.innerHTML = `<p>${post.content}</p>`;
 
-    // Если есть изображение, добавляем его
     if (post.mediaUrl) {
         const img = document.createElement("img");
         img.src = post.mediaUrl;
+        img.style.maxWidth = "100%";
         postDiv.appendChild(img);
     }
 
-    // Кнопка для добавления ответа на пост
     const replyButton = document.createElement("button");
     replyButton.innerText = "Ответить";
     replyButton.onclick = () => addReply(index);
     postDiv.appendChild(replyButton);
 
-    // Добавляем все ответы к посту
     if (post.replies) {
         post.replies.forEach(reply => {
             const replyDiv = document.createElement("div");
             replyDiv.className = "reply";
             replyDiv.innerHTML = `<p>${reply.content}</p>`;
 
-            // Если у ответа есть изображение
             if (reply.mediaUrl) {
                 const replyImg = document.createElement("img");
                 replyImg.src = reply.mediaUrl;
@@ -73,7 +68,6 @@ function createPostElement(post, index) {
     return postDiv;
 }
 
-// Добавление нового поста
 function addPost() {
     if (!currentInterest) {
         alert("Сначала выберите раздел!");
@@ -111,15 +105,12 @@ function addPost() {
     mediaInput.value = "";
 }
 
-// Функция для добавления ответа на пост
 function addReply(postIndex) {
     const replyContent = prompt("Введите ваш ответ:");
     if (!replyContent) return;
 
     const posts = JSON.parse(localStorage.getItem(currentInterest) || "[]");
     const newReply = { content: replyContent, mediaUrl: null };
-    
-    // Добавляем новый ответ к выбранному посту
     posts[postIndex].replies = posts[postIndex].replies || [];
     posts[postIndex].replies.push(newReply);
 

@@ -1,119 +1,125 @@
-// Переключение темы
-document.getElementById("theme-toggle").addEventListener("click", () => {
-    document.body.classList.toggle("light-theme");
-    const theme = document.body.classList.contains("light-theme") ? "light" : "dark";
-    localStorage.setItem("theme", theme);
-});
-
-// Загрузка сохраненной темы
 document.addEventListener("DOMContentLoaded", () => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light") {
-        document.body.classList.add("light-theme");
-    }
-    loadPosts();
+    loadTheme();
+    loadThreads(localStorage.getItem("lastInterest") || "technology");
 });
 
-let currentInterest = ""; 
+function loadTheme() {
+    const theme = localStorage.getItem("theme");
+    document.body.classList.toggle("light-theme", theme === "light");
+}
 
-function loadInterest(interest) {
+document.getElementById("theme-toggle").addEventListener("click", () => {
+    const newTheme = document.body.classList.contains("light-theme") ? "dark" : "light";
+    localStorage.setItem("theme", newTheme);
+    loadTheme();
+});
+
+let currentInterest = "";
+let currentThread = "";
+
+function loadThreads(interest) {
     currentInterest = interest;
-    document.getElementById("current-interest").innerText = `Раздел: ${interest}`;
-    loadPosts();
-}
+    localStorage.setItem("lastInterest", interest);
+    document.getElementById("current-interest").textContent = "Треды в разделе: " + interest;
 
-function loadPosts() {
-    const posts = JSON.parse(localStorage.getItem(currentInterest) || "[]");
-    const postList = document.getElementById("post-list");
-    postList.innerHTML = "";
+    const threadList = document.getElementById("thread-list");
+    threadList.innerHTML = "";
 
-    posts.forEach((post, index) => {
-        const postDiv = createPostElement(post, index);
-        postList.appendChild(postDiv);
+    const threads = JSON.parse(localStorage.getItem(interest) || "[]");
+
+    threads.forEach(thread => {
+        const li = document.createElement("li");
+        li.textContent = thread;
+        li.onclick = () => openThread(thread);
+        threadList.appendChild(li);
     });
+
+    document.getElementById("post-section").style.display = "none";
 }
 
-function createPostElement(post, index) {
-    const postDiv = document.createElement("div");
-    postDiv.className = "post";
-    postDiv.innerHTML = `<p>${post.content}</p>`;
+function createThread() {
+    const title = document.getElementById("thread-title").value.trim();
+    if (!title) return alert("Введите название треда!");
 
-    if (post.mediaUrl) {
-        const img = document.createElement("img");
-        img.src = post.mediaUrl;
-        img.style.maxWidth = "100%";
-        postDiv.appendChild(img);
+    let threads = JSON.parse(localStorage.getItem(currentInterest) || "[]");
+
+    if (threads.includes(title)) {
+        alert("Тред с таким названием уже существует!");
+        return;
     }
 
-    const replyButton = document.createElement("button");
-    replyButton.innerText = "Ответить";
-    replyButton.onclick = () => addReply(index);
-    postDiv.appendChild(replyButton);
+    threads.push(title);
+    localStorage.setItem(currentInterest, JSON.stringify(threads));
 
-    if (post.replies) {
-        post.replies.forEach(reply => {
-            const replyDiv = document.createElement("div");
-            replyDiv.className = "reply";
-            replyDiv.innerHTML = `<p>${reply.content}</p>`;
+    loadThreads(currentInterest);
+}
 
-            if (reply.mediaUrl) {
-                const replyImg = document.createElement("img");
-                replyImg.src = reply.mediaUrl;
-                replyDiv.appendChild(replyImg);
-            }
-            postDiv.appendChild(replyDiv);
-        });
-    }
+function openThread(thread) {
+    currentThread = thread;
+    document.getElementById("thread-title-display").textContent = "Тред: " + thread;
+    document.getElementById("post-section").style.display = "block";
 
-    return postDiv;
+    loadPosts();
 }
 
 function addPost() {
-    if (!currentInterest) {
-        alert("Сначала выберите раздел!");
-        return;
-    }
-    
-    const content = document.getElementById("post-content").value;
-    const mediaInput = document.getElementById("media-input");
-    const mediaFile = mediaInput.files[0];
+    const content = document.getElementById("post-content").value.trim();
+    const media = document.getElementById("media-input").files[0];
 
-    if (!content && !mediaFile) {
-        alert("Введите текст или добавьте изображение!");
-        return;
-    }
+    if (!content && !media) return alert("Введите сообщение или прикрепите изображение!");
 
-    const posts = JSON.parse(localStorage.getItem(currentInterest) || "[]");
-    const newPost = { content, mediaUrl: null, replies: [] };
+    let posts = JSON.parse(localStorage.getItem(currentThread) || "[]");
 
-    if (mediaFile) {
+    let post = { text: content, replies: [] };
+
+    if (media) {
         const reader = new FileReader();
-        reader.onload = function(event) {
-            newPost.mediaUrl = event.target.result;
-            posts.push(newPost);
-            localStorage.setItem(currentInterest, JSON.stringify(posts));
+        reader.onload = function (event) {
+            post.image = event.target.result;
+            posts.push(post);
+            localStorage.setItem(currentThread, JSON.stringify(posts));
             loadPosts();
         };
-        reader.readAsDataURL(mediaFile);
+        reader.readAsDataURL(media);
     } else {
-        posts.push(newPost);
-        localStorage.setItem(currentInterest, JSON.stringify(posts));
+        posts.push(post);
+        localStorage.setItem(currentThread, JSON.stringify(posts));
         loadPosts();
     }
-
-    document.getElementById("post-content").value = "";
-    mediaInput.value = "";
 }
 
-function addReply(postIndex) {
-    const replyContent = prompt("Введите ваш ответ:");
-    if (!replyContent) return;
+function loadPosts() {
+    const postList = document.getElementById("post-list");
+    postList.innerHTML = "";
 
-    const posts = JSON.parse(localStorage.getItem(currentInterest) || "[]");
-    const newReply = { content: replyContent, mediaUrl: null };
-    posts[postIndex].replies = posts[postIndex].replies || [];
-    posts[postIndex].replies.push(newReply);
+    let posts = JSON.parse(localStorage.getItem(currentThread) || "[]");
 
-    localStorage.setItem(currentInterest, JSON.stringify(posts));
+    posts.forEach((post, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<p>${post.text}</p>` + (post.image ? `<img src="${post.image}">` : "") +
+                       `<button onclick="replyToPost(${index})">Ответить</button>`;
+
+        if (post.replies.length) {
+            const replyList = document.createElement("ul");
+            post.replies.forEach(reply => {
+                const replyItem = document.createElement("li");
+                replyItem.textContent = reply;
+                replyList.appendChild(replyItem);
+            });
+            li.appendChild(replyList);
+        }
+
+        postList.appendChild(li);
+    });
+}
+
+function replyToPost(index) {
+    const replyText = prompt("Введите ответ:");
+    if (!replyText) return;
+
+    let posts = JSON.parse(localStorage.getItem(currentThread) || "[]");
+    posts[index].replies.push(replyText);
+    localStorage.setItem(currentThread, JSON.stringify(posts));
+
     loadPosts();
 }

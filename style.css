@@ -1,91 +1,65 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
 body {
     font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #121212;
-    color: #ffffff;
-    padding: 20px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 20px;
-}
-
-#theme-toggle {
-    background-color: #666;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
-.forum-container {
-    width: 100%;
-    max-width: 800px;
     background-color: #1e1e1e;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-#post-form {
-    margin-bottom: 20px;
-}
-
-textarea, input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #333;
-    border-radius: 5px;
-    background-color: #333;
-    color: #f5f5f5;
+    color: white;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 button {
     background-color: #4CAF50;
     color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 10px;
-}
-
-.post, .reply {
-    background-color: #2a2a2a;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 5px;
-}
-
-.reply {
-    margin-left: 20px;
-    background-color: #333;
     padding: 10px;
-    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+    transition: background 0.2s;
 }
 
-body.light-theme {
-    background-color: #f5f5f5;
-    color: #333;
+button:hover {
+    background-color: #45a049;
 }
 
-body.light-theme .forum-container {
-    background-color: #ffffff;
-    color: #333;
+#thread-list, #post-list {
+    list-style: none;
+    padding: 0;
+}
+
+#thread-list li, #post-list li {
+    background: #333;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#thread-list li:hover, #post-list li:hover {
+    background: #444;
+}
+
+#post-section {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #444;
+    display: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 5px auto;
+}
+
+.light-theme {
+    background-color: white;
+    color: black;
+}
+
+.light-theme button {
+    background-color: #007bff;
+}
+
+.light-theme button:hover {
+    background-color: #0056b3;
 }

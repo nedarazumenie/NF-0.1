@@ -3,31 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-0.1.1 - Доска объявлений</title>
+    <title>V-0.1.2</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>V-0.1.1</h1>
+        <h1>V-0.1.2</h1>
         <button id="theme-toggle">Сменить тему</button>
-        <nav id="interests-nav">
-            <button onclick="loadInterest('technology')">Технологии</button>
-            <button onclick="loadInterest('music')">Музыка</button>
-            <button onclick="loadInterest('anime')">Аниме</button>
-            <button onclick="loadInterest('random')">Случайное</button>
-        </nav>
     </header>
 
-    <main class="forum-container">
-        <h2 id="current-interest">Выберите интерес</h2>
-        <section id="post-form">
+    <nav id="interests-nav">
+        <button onclick="loadThreads('technology')">Технологии</button>
+        <button onclick="loadThreads('music')">Музыка</button>
+        <button onclick="loadThreads('anime')">Аниме</button>
+        <button onclick="loadThreads('random')">Случайное</button>
+        <button onclick="loadThreads('work')">Работа</button>
+        <button onclick="loadThreads('study')">Учёба</button>
+        <button onclick="loadThreads('life')">Жизнь</button>
+    </nav>
+
+    <main>
+        <section id="thread-section">
+            <h2 id="current-interest">Выберите интерес</h2>
+            <input type="text" id="thread-title" placeholder="Название треда">
+            <button onclick="createThread()">Создать тред</button>
+            <ul id="thread-list"></ul>
+        </section>
+
+        <section id="post-section" style="display: none;">
+            <h3 id="thread-title-display"></h3>
             <textarea id="post-content" placeholder="Введите сообщение..."></textarea>
             <input type="file" id="media-input" accept="image/*">
             <button onclick="addPost()">Добавить пост</button>
-        </section>
-        <section id="posts">
-            <h3>Посты</h3>
-            <div id="post-list"></div>
+            <ul id="post-list"></ul>
         </section>
     </main>
 

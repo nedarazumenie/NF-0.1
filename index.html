@@ -3,39 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-0.2.2</title>
+    <title>V-0.2.3</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="privacy-modal">
-        <h2>Конфиденциальность</h2>
-        <p>
-            Нажимая на кнопку "принять", вы полностью снимаете ответственность за совершаемые вами действия с владельца сайта.
-            Любой поступок, совершённый вами, является вашей личной ответственностью. Любое нарушение закона — ваша вина.
-        </p>
-        <button id="accept-privacy">Принять</button>
+    <div id="privacy-overlay">
+        <div class="privacy-box">
+            <h2>Конфиденциальность</h2>
+            <p>Нажимая на кнопку "Принять", вы полностью снимаете ответственность за совершаемые действия с владельца сайта. Любое нарушение закона является вашей виной.</p>
+            <button id="accept-privacy">Принять</button>
+        </div>
     </div>
 
     <header>
-        <h1>V-0.2.2</h1>
+        <h1>V-0.2.3</h1>
         <button id="theme-toggle">Сменить тему</button>
     </header>
 
     <nav id="interests-nav">
-        <button data-interest="technology">Технологии</button>
-        <button data-interest="music">Музыка</button>
-        <button data-interest="anime">Аниме</button>
-        <button data-interest="random">Случайное</button>
-        <button data-interest="work">Работа</button>
-        <button data-interest="study">Учёба</button>
-        <button data-interest="life">Жизнь</button>
+        <button onclick="loadThreads('technology')">Технологии</button>
+        <button onclick="loadThreads('music')">Музыка</button>
+        <button onclick="loadThreads('anime')">Аниме</button>
+        <button onclick="loadThreads('random')">Случайное</button>
+        <button onclick="loadThreads('work')">Работа</button>
+        <button onclick="loadThreads('study')">Учёба</button>
+        <button onclick="loadThreads('life')">Жизнь</button>
     </nav>
 
     <main>
         <section id="thread-section">
             <h2 id="current-interest">Выберите интерес</h2>
             <input type="text" id="thread-title" placeholder="Название треда">
-            <button id="create-thread">Создать тред</button>
+            <button onclick="createThread()">Создать тред</button>
             <ul id="thread-list"></ul>
         </section>
 
@@ -43,7 +42,7 @@
             <h3 id="thread-title-display"></h3>
             <textarea id="post-content" placeholder="Введите сообщение..."></textarea>
             <input type="file" id="media-input" accept="image/*">
-            <button id="add-post">Добавить пост</button>
+            <button onclick="addPost()">Добавить пост</button>
             <ul id="post-list"></ul>
         </section>
     </main>
